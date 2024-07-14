@@ -56,6 +56,17 @@
 ### Setup Untilites 
 - Định dạng số với file numberFormat.js; định dạng time, kiểm tra tính validate của token
 
+### Layout and Routers
+- Create Pages
+- Cretate Layouts
+- Setup Routes:
+ - /:HomePage
+ - /account:AccountPage
+ - /user/:userId:UserProfilePage
+ - /login:LoginPage
+ - /register:RegisterPage
+ - /*: NotFoundPage
+
 
 
 
