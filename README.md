@@ -72,6 +72,8 @@
 - LoginPage = RHF + auth.login 
 - AuthRequire -> Navigate to LoginPage if not authenticated
 
+### Registration
+
 
 
 
