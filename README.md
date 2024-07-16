@@ -56,7 +56,7 @@
 ### Setup Untilites 
 - Định dạng số với file numberFormat.js; định dạng time, kiểm tra tính validate của token
 
-### Layout and Routers
+### Layout and Routers (15/7)
 - Create Pages
 - Cretate Layouts
 - Setup Routes:
@@ -66,6 +66,11 @@
  - /login:LoginPage
  - /register:RegisterPage
  - /*: NotFoundPage
+### Authentication (16/7)
+- AuthProvider = AuthContext + useReducer
+- useAuth
+- LoginPage = RHF + auth.login 
+- AuthRequire -> Navigate to LoginPage if not authenticated
 
 
 
