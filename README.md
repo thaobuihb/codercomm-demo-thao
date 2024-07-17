@@ -72,7 +72,11 @@
 - LoginPage = RHF + auth.login 
 - AuthRequire -> Navigate to LoginPage if not authenticated
 
-### Registration
+### Registration (17/7)
+### MainHeader and HomePage (17/7)
+- MainHeader: Appbar, Menu, Avarta
+- HomePage: ProfileCover, Tabs (profile, friend list, friend request, add friend)
+- Divider and Conqure
 
 
 
