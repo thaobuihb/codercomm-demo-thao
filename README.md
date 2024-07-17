@@ -77,6 +77,10 @@
 - MainHeader: Appbar, Menu, Avarta
 - HomePage: ProfileCover, Tabs (profile, friend list, friend request, add friend)
 - Divider and Conqure
+### Custom Theme
+- create theme
+- custom component: Link, Tabs, Card
+
 
 
 
