@@ -80,9 +80,15 @@
 ### Custom Theme
 - create theme
 - custom component: Link, Tabs, Card
-
-
-
+### Setup Redux and create Post
+- setup store, create slices
+### List of Posts with pagination
+- postList, load more
+### PostCard and Comment
+- postcart, comment: postReaction, commentCard, pagination
+### Emoji Reaction
+- PostReraction, commentReaction
+### Add Friend
 
 
 

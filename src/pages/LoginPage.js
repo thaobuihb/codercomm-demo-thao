@@ -35,6 +35,7 @@ function LoginPage() {
   const location = useLocation();
   const auth = useAuth();
   const [showPassword, setShowPassword] = useState(false);
+
   const methods = useForm({
     resolver: yupResolver(LoginSchema),
     defaultValues,

@@ -6,7 +6,6 @@ import {
 } from "@mui/material/styles";
 import customizeComponents from "./customizations";
 
-
 const PRIMARY = {
   lighter: "#C8FACD",
   light: "#5BE584",
@@ -74,9 +73,9 @@ function ThemeProvider({ children }) {
     },
     shape: { borderRadius: 8 },
   };
+
   const theme = createTheme(themeOptions);
   theme.components = customizeComponents(theme);
-
 
   return (
     <MUIThemeProvider theme={theme}>

@@ -7,7 +7,7 @@ function AuthRequire({ children }) {
   const location = useLocation();
 
   if (!isInitialized) {
-    return <LoadingScreen/>
+    return <LoadingScreen />;
   }
 
   if (!isAuthenticated) {

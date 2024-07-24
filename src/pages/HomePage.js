@@ -1,18 +1,19 @@
-import React, { useState } from 'react'
-import useAuth from '../hooks/useAuth';
+import React, { useState } from "react";
+import useAuth from "../hooks/useAuth";
 
+import { Box, Card, Container, Tab, Tabs } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import ContactMailIcon from "@mui/icons-material/ContactMail";
 import PersonAddRoundedIcon from "@mui/icons-material/PersonAddRounded";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import Profile from '../features/user/Profile';
-import FriendList from '../features/friend/FriendList';
-import FriendRequests from '../features/friend/FriendRequests';
-import AddFriend from '../features/friend/AddFriend';
-import { Box, Card, Container, Tab, Tabs, } from '@mui/material';
-import { styled } from "@mui/material/styles";
-import { capitalCase } from 'change-case';
-import ProfileCover from '../features/user/ProfileCover';
+
+import Profile from "../features/user/Profile";
+import ProfileCover from "../features/user/ProfileCover";
+import { capitalCase } from "change-case";
+import AddFriend from "../features/friend/AddFriend";
+import FriendRequests from "../features/friend/FriendRequests";
+import FriendList from "../features/friend/FriendList";
 
 const TabsWrapperStyle = styled("div")(({ theme }) => ({
   zIndex: 9,
@@ -31,7 +32,7 @@ const TabsWrapperStyle = styled("div")(({ theme }) => ({
 }));
 
 function HomePage() {
-  const { user } = useAuth;
+  const { user } = useAuth();
   const [currentTab, setCurrentTab] = useState("profile");
 
   const handleChangeTab = (newValue) => {
@@ -71,6 +72,7 @@ function HomePage() {
         }}
       >
         <ProfileCover profile={user} />
+
         <TabsWrapperStyle>
           <Tabs
             value={currentTab}
@@ -89,14 +91,15 @@ function HomePage() {
               />
             ))}
           </Tabs>
-          {PROFILE_TABS.map((tab) => {
+        </TabsWrapperStyle>
+      </Card>
+
+      {PROFILE_TABS.map((tab) => {
         const isMatched = tab.value === currentTab;
         return isMatched && <Box key={tab.value}>{tab.component}</Box>;
       })}
-      </TabsWrapperStyle>
-      </Card>
     </Container>
-  )
+  );
 }
 
-export default HomePage
+export default HomePage;
