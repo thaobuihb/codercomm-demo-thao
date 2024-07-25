@@ -53,6 +53,23 @@ const slice = createSlice({
       state.currentPagePosts.unshift(newPost._id);
     },
 
+    updatePostSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const newPost = action.payload;
+      state.postsById[newPost._id] = newPost;
+    },
+
+    deletePostSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const { postId } = action.payload;
+      delete state.postsById[postId];
+      state.currentPagePosts = state.currentPagePosts.filter((post) => {
+        return post !== postId;
+      });
+    },
+
     sendPostReactionSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
@@ -95,6 +112,43 @@ export const createPost =
       dispatch(slice.actions.createPostSuccess(response.data));
       toast.success("Post successfully");
       dispatch(getCurrentUserProfile());
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
+
+export const updatePost =
+  ({ postId, content, image }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const imageUrl = await cloudinaryUpload(image);
+      const response = await apiService.put(`/posts/${postId}`, {
+        content,
+        image: imageUrl,
+      });
+      // Get the user since update post return only author._id (not all info)
+      const user = await apiService.get(`/users/me`);
+      response.data.author = user.data;
+      dispatch(slice.actions.updatePostSuccess(response.data));
+      toast.success("Update successfully");
+      dispatch(getCurrentUserProfile());
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
+
+export const deletePost =
+  ({ postId }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await apiService.delete(`/posts/${postId}`);
+      dispatch(slice.actions.deletePostSuccess({ postId }));
+      dispatch(getCurrentUserProfile());
+      toast.success(response.message);
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
       toast.error(error.message);

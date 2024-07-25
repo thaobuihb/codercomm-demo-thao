@@ -44,6 +44,23 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+// edit comment
+    updateCommentSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+    },
+//  delete comment
+    deleteCommentSuccess(state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const commentId = action.payload._id;
+      const postId = action.payload.post;
+      delete state.commentsById[commentId];
+      state.totalCommentsByPost[postId]--;
+      state.commentsByPost[postId] = state.commentsByPost[postId].filter(
+        (comment) => comment !== commentId
+      );
+    },
 
     sendCommentReactionSuccess(state, action) {
       state.isLoading = false;
@@ -91,6 +108,36 @@ export const createComment =
         postId,
       });
       dispatch(slice.actions.createCommentSuccess(response.data));
+      dispatch(getComments({ postId }));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
+
+export const updateComment =
+  ({ commentId, postId, content }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    const response = await apiService.put(`/comments/${commentId}`, {
+      content,
+    });
+    dispatch(slice.actions.updateCommentSuccess(response.data));
+    dispatch(getComments({ postId }));
+    try {
+    } catch (error) {
+      dispatch(slice.actions.hasError(error.message));
+      toast.error(error.message);
+    }
+  };
+
+export const deleteComment =
+  ({ commentId, postId }) =>
+  async (dispatch) => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await apiService.delete(`/comments/${commentId}`);
+      dispatch(slice.actions.deleteCommentSuccess(response.data));
       dispatch(getComments({ postId }));
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
