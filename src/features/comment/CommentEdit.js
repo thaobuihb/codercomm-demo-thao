@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateComment, selectCommentById } from "./commentSlice.js";
 
 const yupSchema = Yup.object().shape({
-  content: Yup.string().required("Nội dung không được để trống"),
+  content: Yup.string().required("Content cannot be empty"),
 });
 
 export default function CommentEdit({ postId, commentId }) {
@@ -57,11 +57,11 @@ export default function CommentEdit({ postId, commentId }) {
           commentId: commentId,
           content: data.content,
         })
-      ).unwrap(); // Sử dụng unwrap để xử lý Promise
-      setOpen(false); // Đóng hộp thoại sau khi cập nhật thành công
+      ).unwrap(); 
+      setOpen(false); 
       reset();
     } catch (error) {
-      console.error("Cập nhật bình luận thất bại: ", error);
+      console.error("Comment update failed: ", error);
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ export default function CommentEdit({ postId, commentId }) {
 
   return (
     <div>
-      <Typography onClick={handleClickOpen}>Chỉnh sửa</Typography>
+      <Typography onClick={handleClickOpen}>Edit</Typography>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -77,10 +77,10 @@ export default function CommentEdit({ postId, commentId }) {
         maxWidth={"sm"}
       >
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle>Chỉnh sửa bình luận</DialogTitle>
+          <DialogTitle>Edit comment</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Vui lòng cập nhật bình luận của bạn tại đây.
+            Please update your comments here
             </DialogContentText>
 
             <FTextField
@@ -88,7 +88,7 @@ export default function CommentEdit({ postId, commentId }) {
               multiline
               fullWidth
               rows={4}
-              placeholder="Chia sẻ suy nghĩ của bạn..."
+              placeholder="Share your thoughts..."
               sx={{
                 "& fieldset": {
                   borderWidth: `1px !important`,
@@ -100,10 +100,10 @@ export default function CommentEdit({ postId, commentId }) {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} disabled={loading}>
-              Hủy
+            cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Đang cập nhật..." : "Cập nhật"}
+              {loading ? "updating..." : "update"}
             </Button>
           </DialogActions>
         </FormProvider>
