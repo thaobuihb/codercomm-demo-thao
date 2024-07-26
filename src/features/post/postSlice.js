@@ -81,6 +81,9 @@ const slice = createSlice({
 
 export default slice.reducer;
 
+export const selectPostById = (state, postId) => state.post.postsById[postId];
+
+
 export const getPosts =
   ({ userId, page = 1, limit = POSTS_PER_PAGE }) =>
   async (dispatch) => {
@@ -176,3 +179,4 @@ export const sendPostReaction =
       toast.error(error.message);
     }
   };
+

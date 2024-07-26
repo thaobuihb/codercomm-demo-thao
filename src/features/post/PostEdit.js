@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Yup from "yup";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -14,26 +14,34 @@ import FormProvider from "../../components/form/FormProvider.js";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { alpha } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { updatePost } from "./postSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { updatePost, selectPostById } from "./postSlice.js"; // Import đúng selector
 
 const yupSchema = Yup.object().shape({
   content: Yup.string().required("Content is required"),
 });
 
-const defaultValues = {
-  content: "",
-  image: null,
-};
-
 export default function PostEdit({ postId }) {
   const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
+  const existingPost = useSelector((state) => selectPostById(state, postId));
+
   const methods = useForm({
     resolver: yupResolver(yupSchema),
-    defaultValues,
+    defaultValues: {
+      content: existingPost ? existingPost.content : "",
+      image: existingPost ? existingPost.image : null,
+    },
   });
+
   const { handleSubmit, setValue, reset } = methods;
-  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (existingPost) {
+      setValue("content", existingPost.content);
+      setValue("image", existingPost.image);
+    }
+  }, [existingPost, setValue]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,14 +55,19 @@ export default function PostEdit({ postId }) {
   const onSubmit = (data) => {
     dispatch(
       updatePost({ postId: postId, content: data.content, image: data.image })
-    ).then(() => reset());
-    setOpen(false);
+    )
+      .then(() => {
+        setOpen(false);
+        reset();
+      })
+      .catch((error) => {
+        console.error("Cập nhật bài viết thất bại: ", error);
+      });
   };
 
   const handleDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
-
       if (file) {
         setValue(
           "image",
@@ -74,7 +87,7 @@ export default function PostEdit({ postId }) {
         open={open}
         onClose={handleClose}
         fullWidth={true}
-        maxWidth={"50vw"}
+        maxWidth={"sm"}
       >
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <DialogTitle>Edit post</DialogTitle>

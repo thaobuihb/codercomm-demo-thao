@@ -44,12 +44,14 @@ const slice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
-// edit comment
+
     updateCommentSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
+      const updatedComment = action.payload;
+      state.commentsById[updatedComment._id] = updatedComment;
     },
-//  delete comment
+
     deleteCommentSuccess(state, action) {
       state.isLoading = false;
       state.error = null;
@@ -119,15 +121,17 @@ export const updateComment =
   ({ commentId, postId, content }) =>
   async (dispatch) => {
     dispatch(slice.actions.startLoading());
-    const response = await apiService.put(`/comments/${commentId}`, {
-      content,
-    });
-    dispatch(slice.actions.updateCommentSuccess(response.data));
-    dispatch(getComments({ postId }));
     try {
+      const response = await apiService.put(`/comments/${commentId}`, {
+        content,
+      });
+      dispatch(slice.actions.updateCommentSuccess(response.data));
+      dispatch(getComments({ postId }));
+      return response.data; // Trả về dữ liệu phản hồi để sử dụng trong component
     } catch (error) {
       dispatch(slice.actions.hasError(error.message));
       toast.error(error.message);
+      throw error; // Ném lỗi để xử lý trong component
     }
   };
 
@@ -166,3 +170,6 @@ export const sendCommentReaction =
       toast.error(error.message);
     }
   };
+
+// Selector
+export const selectCommentById = (state, commentId) => state.comment.commentsById[commentId];
